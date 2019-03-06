@@ -117,7 +117,7 @@ const DOM = {
       const missingHeight = position.y + element.offsetHeight + 20 - window.innerHeight
       const missingWidth = position.x + element.offsetWidth + 20 - window.innerWidth
       if (missingHeight > 0) {
-        element.style.top = position.y - missingHeight + 'px'
+        element.style.top = Math.max(position.y - missingHeight, 0) + 'px'
       }
 
       if (missingWidth > 0) {

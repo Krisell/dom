@@ -1,6 +1,6 @@
 {
   "name": "@krisell/dom",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Create DOM elements easily",
   "main": "lib/index.js",
   "scripts": {

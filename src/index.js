@@ -1,5 +1,7 @@
 import BetterArguments from '@krisell/better-arguments'
 
+const loadStates = {}
+
 const DOM = {
   /**
    * Creates a DOM-element with tag and class set in
@@ -90,15 +92,26 @@ const DOM = {
    * Loads a script dynamically and returns a promise which
    * resolves when the script has been loaded.
    */
-  loadScript (src) {
+  loadScript (src, options = {}) {
+    const forceLoad = options.force === true
+    const skipLoad = loadStates[src] === 'pending' || loadStates[src] === 'success'
+    
+    if (skipLoad && !forceLoad) {
+      return Promise.resolve()
+    }
+    
+    loadStates[src] = 'pending'
+    
     let script = document.createElement('script')
 
     return new Promise((resolve, reject) => {
       script.onload = function () {
+        loadStates[src] = 'success'
         resolve()
       }
 
       script.onerror = function () {
+        loadStates[src] = 'error'
         reject(new Error('Script load error'))
       }
 

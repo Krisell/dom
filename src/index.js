@@ -96,7 +96,7 @@ const DOM = {
     const forceLoad = options.force === true
 
     if (loadStates[src] && loadStates[src].state === 'pending' && !forceLoad) {
-      return loadStats[src].promise
+      return loadStates[src].promise
     }
 
     if (loadStates[src] && loadStates[src].state === 'success' && !forceLoad) {

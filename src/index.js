@@ -94,30 +94,34 @@ const DOM = {
    */
   loadScript (src, options = {}) {
     const forceLoad = options.force === true
-    const skipLoad = loadStates[src] === 'pending' || loadStates[src] === 'success'
-    
-    if (skipLoad && !forceLoad) {
+
+    if (loadStates[src] && loadStates[src].state === 'pending' && !forceLoad) {
+      return loadStats[src].promise
+    }
+
+    if (loadStates[src] && loadStates[src].state === 'success' && !forceLoad) {
       return Promise.resolve()
     }
-    
-    loadStates[src] = 'pending'
-    
-    let script = document.createElement('script')
 
-    return new Promise((resolve, reject) => {
+    let script = document.createElement('script')
+    let promise =  new Promise((resolve, reject) => {
       script.onload = function () {
-        loadStates[src] = 'success'
+        loadStates[src] = { state: 'success' }
         resolve()
       }
 
       script.onerror = function () {
-        loadStates[src] = 'error'
+        loadStates[src] = { state: 'error' }
         reject(new Error('Script load error'))
       }
 
       script.src = src
       document.body.appendChild(script)
     })
+
+    loadStates[src] = { state: 'pending', promise }
+
+    return promise
   },
 
   showAtPosition (element, position) {

@@ -112,7 +112,7 @@ const DOM = {
 
       script.onerror = function () {
         loadStates[src] = { state: 'error' }
-        reject(new Error('Script load error'))
+        reject(new Error(`Script load error. Could not load ${script.src}`))
       }
 
       script.src = src
